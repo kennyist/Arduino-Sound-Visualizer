@@ -17,18 +17,16 @@ int dataPin = 11;
 // -------- LEDs -------- //
 
 int nLEDs = 25; // Number of LED's 
+int LEDsplit = 13; // Where is the top middle LED;
 
-/*     NOT IN USE AT THE MOMENT
-int nLEDbottom = 0; // Number of LEDs on the bottom on the monitor
-int nLEDleft = 8; // Number of LEDs on the left side
-int nLEDtop = 9; // Number of LEDs on the top
-int nLEDright = 8; // NUmber of LEDs on the right side
-*/
+// sound meter settings
+int bottomLeftLEDs = 0;
+int bottomRightLEDs = 0;
 
 boolean leftToRight = true; // Does the LED stip start from Left side of the screen?
 int mode = 1; // Do you want to  fade from colour to color (0), from black into colour (1)
 float sensitivity = 1; // Multiply the incoming volume level so lower sound levels create brighter light
-int fadeAm = 7; // Fade speed
+int fadeAm = 0; // Fade speed
 
 // ---- Colour settings ---- //
 
@@ -85,10 +83,6 @@ void loop() {
          break;
         case 1:
           fade();
-         break;
-        case 2:
-          //soundMeter();
-          ColourFade();
          break; 
       }
       
@@ -118,7 +112,7 @@ void loop() {
 void fade(){
   
   int i = 0, imax = 0;
-  if(leftToRight){ i = 0; imax = (nLEDs / 2); } else { i = (nLEDs / 2), imax = nLEDs; }
+  if(leftToRight){ i = 0; imax = LEDsplit; } else { i = LEDsplit, imax = nLEDs; }
   
   for(i;i<imax;i++){
    rgb[0] = fadeInt(fadeColLeft[0],rgb[0],t1);
@@ -129,7 +123,7 @@ void fade(){
    led.setLED(i, col);
  }
  
- if(leftToRight){ i = (nLEDs / 2), imax = nLEDs; } else { i = 0; imax = (nLEDs / 2); }
+ if(leftToRight){ i = LEDsplit, imax = nLEDs; } else { i = 0; imax = LEDsplit; }
  
  for(i;i<imax;i++){
    rgb2[0] = fadeInt(fadeColRight[0],rgb2[0],t2);
@@ -152,7 +146,7 @@ void ColourFade(){
   
   float fade = (t1 * sensitivity) / 100;
   
-  if(leftToRight){ i = 0; imax = (nLEDs / 2); } else { i = (nLEDs / 2), imax = nLEDs; }
+  if(leftToRight){ i = 0; imax = LEDsplit; } else { i = LEDsplit, imax = nLEDs; }
   
   for(i; i < imax; i++){
     Tinker::Vect3d<float> finalColour(startColOne*(1-fade) + endColOne*(fade));  
@@ -163,7 +157,7 @@ void ColourFade(){
   
   fade = (t2 * sensitivity) / 100;
   
-  if(leftToRight){ i = (nLEDs / 2), imax = nLEDs; } else { i = 0; imax = (nLEDs / 2); }
+  if(leftToRight){ i = LEDsplit, imax = nLEDs; } else { i = 0; imax = LEDsplit; }
   
   for(i; i < imax; i++){
     Tinker::Vect3d<float> finalColour(startColTwo*(1-fade) + endColTwo*(fade));  
@@ -173,9 +167,7 @@ void ColourFade(){
   }
 }
 
-
-
-/* BUGGY
+/*
 void soundMeter(){
   
   float gapTot = 100 / nLEDleft;
@@ -193,8 +185,7 @@ void soundMeter(){
     led.setLED((nLEDbottom / 2) + i, col);
     led.setLED((nLEDs - (nLEDbottom / 2)) - i, col);
   }
-}
-*/
+}*/
 
 
 
